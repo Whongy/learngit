@@ -1,0 +1,43 @@
+GIT 知识点
+初始化一个GIT仓库，使用git init命令。
+添加文件到GIT仓库，分俩步：
+使用git add<file>命令，注意可反复多次使用，添加多个文件；
+使用命令commit -m <message>,完成  这里注释一定要写。
+
+使用命令git stasus查看工作区的状态，如果git stasus告诉你有文件修改过，可使用git diff查看修改内容。
+HEAD只想的版本就是当前版本，因此，GIT允许我们在版本历史中穿梭，使用命令git reset -hard commit_id.
+穿梭钱，用git log可以查看提交历史，以便确定回退到哪个版本。
+要重返未来，用git reflog查看命令历史以便确定回到哪个版本。
+
+关于删除文件：
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -file.
+场景2：当你不但改乱工作区某个文件的内容，还添加到了暂存区，想丢弃修改，分俩步，第一步用命令git reset HEAD <flie>,就回到了场景1，第二步按场景1操作。
+场景3：已经提交了不适合的修改到版本库的时候，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
+命令git rm用于删除一个文件，如果一个文件已经被提交到版本库，那么你永远不会担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失最近一次提交后你修改的内容。
+
+GIT杀手级功能就是分支
+查看分支 git branch
+创建分支 git branch <name>
+切换分支 git checkout <name>
+创建+切换分支 git checkout -b <name>
+合并某分支到当前分支：git merge <name>
+删除分支 git branch -d <name>
+
+
+当GIT无法自动合并分支时，就必须先手动解决冲突。解决冲突后，再提交，合并完成。
+用git log --graph命令可以查看分支合并图
+
+GIT分支十分强大，在团队开发中应该充分利用。合并分支时，加上 --no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward模式就看不出来。
+在fast forward模式下删除分支后会丢掉分支信息。
+修复BUG时，我们会通过创建新的BUG分支进行修复，然后合并，最后删除。
+当下手头工作没有完成时，先把工作 现场git stash --一下，然后去修复BUG修复后，再git stash pop,回到工作现场
+git stash list
+git stash apply stash@｛0｝
+一种是用git stash apply恢复，但是恢复后 stash内容并不删除，你需要用git stash drop  来删除
+另一种方式是用git stash pop恢复的同事也把stash内容给删除了。
+
+开发一个新feature,最好新建一个分支；
+如果要丢弃一个没有合并过的分支，可以通过git branch -D <name> 强行删除。
+
+查看远程库信息，使用git remote -v
+本地推送分支，使用git pussh origin branch-name,如果推送失败先用git pull抓取远程的新提交。
